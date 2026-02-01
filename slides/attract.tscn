@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://ce7sdgesa20ug"]
+
+[ext_resource type="Script" uid="uid://dru3usokwlhd3" path="res://addons/mpf-gmc/classes/mpf_slide.gd" id="1_r1mnt"]
+
+[node name="Attract" type="Control" unique_id=306217497]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_r1mnt")
+metadata/_custom_type_script = "uid://dru3usokwlhd3"
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2012650824]
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 1024.0
+color = Color(0.1254902, 0.31764707, 0.9137255, 1)
+
+[node name="Label" type="Label" parent="ColorRect" unique_id=414289172]
+layout_mode = 0
+offset_left = 232.0
+offset_top = 298.0
+offset_right = 1090.0
+offset_bottom = 609.0
+theme_override_font_sizes/font_size = 80
+text = "Banjo Kazooie Pinball"
+horizontal_alignment = 1
+vertical_alignment = 1
