@@ -5,12 +5,7 @@
 
 ## Overview
 
-Configure the FAST Pinball 3208 board coils, flippers, and slingshots in MPF. The board has 8 outputs (pins 0–7), all allocated.
-
-This task is split into two phases:
-
-- **Phase 1 (this task):** Add coil hardware numbers, flipper/slingshot device definitions, and new switch placeholders. Platform remains `virtual` so MPF can still run without real hardware.
-- **Phase 2 (separate task):** Assign hardware numbers to all switches, switch platform to `fast`, and restore the trough eject coil on a second board.
+Configure the FAST Pinball 3208 board coils, flippers, and slingshots in MPF. The board has 8 outputs (pins 0–7), all allocated. Platform switches from `virtual` to `fast` on COM4. Switch hardware numbers are left blank — fill them in before the first hardware run.
 
 ## Hardware
 
@@ -30,13 +25,11 @@ This task is split into two phases:
 | 6 | Right slingshot | 0-6 |
 | 7 | Left slingshot | 0-7 |
 
-## Phase 1 File Changes
+## File Changes
 
 > **Step order matters:** Follow steps 1–5 in order. Create the new file before updating
 > `config.yaml`, and do not delete the old file until `config.yaml` already points to the new one.
-> All 5 steps must be completed before attempting to run MPF — the config is in an intermediate
-> state until all steps are done (e.g., `flipper_upper` references `s_flipper_upper` which is
-> added in Step 4, and flippers reference EOS switches also added in Step 4).
+> All 5 steps must be completed before attempting to run MPF.
 
 ### Step 1 — Create `config/config_coils_flippers.yaml`
 
@@ -70,7 +63,7 @@ coils:
   c_slingshot_left:
     number: 0-7
     default_pulse_ms: 10  # placeholder; tune during hardware testing
-  # c_trough_eject:       # deferred to Phase 2 (requires second board)
+  # c_trough_eject:       # trough not installed; uncomment when wired
   #   number:
 
 flippers:
@@ -103,9 +96,15 @@ autofire_coils:
 
 Replace `config_coils.yaml` with `config_coils_flippers.yaml` in the `config:` list.
 Keep `config_switches.yaml` and `config_ball_devices.yaml` unchanged.
-Do **not** add `hardware:` or `fast:` blocks — platform stays `virtual`.
+Add the `hardware:` and `fast:` blocks.
 
 ```yaml
+hardware:
+  platform: fast
+
+fast:
+  ports: COM4
+
 config:
   - config_switches.yaml
   - config_ball_devices.yaml
@@ -118,8 +117,8 @@ Delete the old file. Its contents have moved to `config_coils_flippers.yaml`.
 
 ### Step 4 — Update `config/config_switches.yaml`
 
-Add 6 new switches with blank `number:` values (consistent with existing switches).
-Numbers are filled in during Phase 2. FAST switch numbers use `node-pin` format (e.g., `0-0`).
+Add 6 new switches. All switch `number:` values (existing and new) are left blank — FAST
+switch numbers use `node-pin` format (e.g., `0-0`). Fill them in before the first hardware run.
 
 ```yaml
 s_flipper_upper:
@@ -146,46 +145,27 @@ s_flipper_upper_eos:
 
 > This step is **required**. The old `config_coils.yaml` (which defined `c_trough_eject`)
 > is being deleted. If `bd_trough` still references `eject_coil: c_trough_eject`, MPF
-> will fail to load because the coil no longer exists in any loaded file.
+> will fail to load because the coil no longer exists.
 
-Comment out the `eject_coil:` and `eject_targets:` lines on `bd_trough`. The device
-itself (including `ball_switches:`) must remain — MPF requires a trough device with
-`ball_switches` to track ball count.
+Comment out `eject_coil:` and `eject_targets:` on `bd_trough`. The `ball_switches:` line
+must remain — MPF requires it to track ball count.
+
+```yaml
+bd_trough:
+  ball_switches: s_trough_1, s_trough_2, s_trough_3, s_trough_4
+  # eject_coil: c_trough_eject      # trough not installed
+  # eject_targets: bd_plunger       # trough not installed
+  tags: trough, home, drain
+```
 
 ## Flipper EOS Behavior
 
-MPF's `flippers:` section supports an `eos_switch` parameter for dual-wound flippers.
-When the EOS switch activates (flipper reaches full stroke), MPF disables the main coil
-while the hold coil remains energized, preventing heat damage.
+All three flippers have physical EOS switches. MPF's `eos_switch` parameter disables the
+main coil when the flipper reaches full stroke, while the hold coil keeps the flipper up.
 
-> **Hardware assumption:** EOS switches are assumed to be physically present and wired on
-> all three flippers. If a flipper has no EOS switch, remove the `eos_switch:` line for
-> that flipper — otherwise MPF will hold the main coil energized indefinitely (the EOS
-> condition never fires), which can burn out the winding.
->
-> **Virtual platform note:** In virtual mode, EOS switches with blank `number:` values are
-> accepted by MPF as switches that never activate. If MPF raises a load error for the blank
-> EOS switch numbers, temporarily comment out the `eos_switch:` lines in the flipper
-> definitions until Phase 2 when real numbers are assigned.
+## Notes
 
-## Phase 2 Checklist (Deferred)
-
-When hardware wiring is complete:
-
-1. Assign real numbers to all blank `number:` entries in `config_switches.yaml`
-2. Add to `config.yaml` (verify exact syntax against MPF v0.80 docs — `hardware: platform:` nesting may differ from earlier versions):
-   ```yaml
-   hardware:
-     platform: fast
-   fast:
-     ports: COM4
-   ```
-3. Wire second board; uncomment `c_trough_eject` in `config_coils_flippers.yaml`
-4. Restore `eject_coil:` and `eject_targets:` on `bd_trough` in `config_ball_devices.yaml`
-
-## Out of Scope for Phase 1
-
-- Switch hardware number assignment
-- Platform switch from virtual to fast
-- Trough eject coil (requires second board)
-- Pulse timing tuning (defaults used; tune during physical testing)
+- Switch numbers are blank across the entire `config_switches.yaml` file. MPF will not
+  connect to FAST hardware until all numbers are assigned.
+- Trough is not installed. `c_trough_eject`, `eject_coil:`, and `eject_targets:` are all
+  commented out and must be restored when the trough is wired.
