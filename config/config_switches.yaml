@@ -1,0 +1,42 @@
+#config_version=6
+
+switches: 
+  #Cabinet Switches
+  s_flipper_left:
+    number:
+    tags: left_flipper
+  s_flipper_right:
+    number:
+    tags: right_flipper
+  # Trough Switches
+  s_trough_1:
+    number:
+  s_trough_2:
+    number:
+  s_trough_3:
+    number:
+  s_trough_4:
+    number:
+  s_plunger_lane:
+    number:
+  # Upper Flipper
+  s_flipper_upper:
+    number:
+    tags: upper_flipper
+  # Slingshots
+  s_slingshot_left:
+    number:
+    tags: slingshot
+  s_slingshot_right:
+    number:
+    tags: slingshot
+  # EOS Switches
+  s_flipper_left_eos:
+    number:
+    tags: eos
+  s_flipper_right_eos:
+    number:
+    tags: eos
+  s_flipper_upper_eos:
+    number:
+    tags: eos
