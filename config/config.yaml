@@ -11,7 +11,9 @@ hardware:
   platform: fast
 
 fast:
-  ports: COM4
+  net:
+    port: COM4
+    controller: neuron
 
 config:
   - config_switches.yaml
