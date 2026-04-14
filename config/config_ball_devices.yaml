@@ -6,8 +6,8 @@ ball_devices:
     mechanical_eject: true
   bd_trough:
     ball_switches: s_trough_1, s_trough_2, s_trough_3, s_trough_4
-    # eject_coil: c_trough_eject      # trough not installed
-    # eject_targets: bd_plunger       # trough not installed
+    mechanical_eject: true
+    eject_targets: bd_plunger       # trough not installed
     tags: trough, home, drain
 
      
