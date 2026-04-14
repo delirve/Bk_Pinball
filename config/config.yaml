@@ -28,5 +28,13 @@ playfields:
     default_source_device: bd_trough
     tags: default
 
+keyboard:
+  z:
+    switch: s_flipper_left
+  "/":
+    switch: s_right_outlane
+  shift:
+    switch: s_flipper_upper
+
 
   
