@@ -2,29 +2,29 @@
 
 coils:
   c_flipper_left_main:
-    number: 0-0
+    number: 3208-0
     default_pulse_ms: 30
   c_flipper_left_hold:
-    number: 0-1
+    number: 3208-1
     allow_enable: true
   c_flipper_right_main:
-    number: 0-2
+    number: 3208-2
     default_pulse_ms: 30
   c_flipper_right_hold:
-    number: 0-3
+    number: 3208-3
     allow_enable: true
   c_flipper_upper_main:
-    number: 0-4
+    number: 3208-4
     default_pulse_ms: 30
   c_flipper_upper_hold:
-    number: 0-5
+    number: 3208-5
     allow_enable: true
-  c_slingshot_right:
-    number: 0-6
-    default_pulse_ms: 10
-  c_slingshot_left:
-    number: 0-7
-    default_pulse_ms: 10
+  c_right_sling:
+    number: 3208-6
+    default_pulse_ms: 5
+  c_left_sling:
+    number: 3208-7
+    default_pulse_ms: 5
   # c_trough_eject:       # trough not installed; uncomment when wired
   #   number:
 
@@ -53,8 +53,8 @@ flippers:
 
 autofire_coils:
   slingshot_left:
-    coil: c_slingshot_left
+    coil: c_left_sling
     switch: s_slingshot_left
   slingshot_right:
-    coil: c_slingshot_right
+    coil: c_right_sling
     switch: s_slingshot_right

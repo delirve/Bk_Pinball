@@ -12,8 +12,24 @@ hardware:
 
 fast:
   net:
-    port: COM4
     controller: neuron
+    port: auto
+    io_loop:
+      3208:
+        model: FP-I/O-3208
+        order: 1
+
+
+
+#Config for Neuron controller and expansion boards. Playfield can be changed to any name, and this will what you will use for beginning address of each led on that expansion board (serial lets, WS2812, etc).
+
+  exp: 
+    boards:  
+      neuron:
+        model: FP-EXP-2000  
+    port: auto
+    baud: 921600
+    debug: False
 
 config:
   - config_switches.yaml
@@ -28,13 +44,7 @@ playfields:
     default_source_device: bd_trough
     tags: default
 
-keyboard:
-  z:
-    switch: s_flipper_left
-  "/":
-    switch: s_right_outlane
-  shift:
-    switch: s_flipper_upper
+
 
 
   
